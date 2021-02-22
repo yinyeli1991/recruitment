@@ -3,24 +3,24 @@ groupname=`egrep "mysql" /etc/group |awk -F: '{print $1}' |wc -l`
 username=`egrep "mysql" /etc/passwd |awk -F: '{print $1}' |wc -l`
 mysql1=`rpm -qa | grep -i mysql`
 mkdir -p /opt/mysqldata/tmp
-#Ìí¼ÓÓÃ»§×é
+#æ·»åŠ ç”¨æˆ·ç»„
 if [  $groupname -ne 1 ]; then
-         echo "ÓÃ»§×é²»´æÔÚ£¬¿ªÊ¼´´½¨ÓÃ»§×é"
+         echo "ç”¨æˆ·ç»„ä¸å­˜åœ¨ï¼Œå¼€å§‹åˆ›å»ºç”¨æˆ·ç»„"
             groupadd mysql
              else
-                echo "ÓÃ»§×éÒÑ´æÔÚ£¬ÎÞÐè´´½¨"
+                echo "ç”¨æˆ·ç»„å·²å­˜åœ¨ï¼Œæ— éœ€åˆ›å»º"
 fi
-#ÐÂ½¨mysqlÓÃ»§Í¬Ê±¼ÓÈëÓÃ»§×é²¢ÇÒ½ûÖ¹mysqlµÇÂ½linux
+#æ–°å»ºmysqlç”¨æˆ·åŒæ—¶åŠ å…¥ç”¨æˆ·ç»„å¹¶ä¸”ç¦æ­¢mysqlç™»é™†linux
 if [  $username -ne 1 ]; then
- echo "ÓÃ»§²»´æÔÚ£¬¿ªÊ¼´´½¨ÓÃ»§Í¬Ê±¼ÓÈëÓÃ»§×é²¢ÇÒ½ûÖ¹mysqlµÇÂ½linux"
+ echo "ç”¨æˆ·ä¸å­˜åœ¨ï¼Œå¼€å§‹åˆ›å»ºç”¨æˆ·åŒæ—¶åŠ å…¥ç”¨æˆ·ç»„å¹¶ä¸”ç¦æ­¢mysqlç™»é™†linux"
             useradd -r -s /sbin/nologin -g mysql mysql -d /usr/local/mysql
              else
-                echo "ÓÃ»§ÒÑ´æÔÚ£¬ÎÞÐè´´½¨"
+                echo "ç”¨æˆ·å·²å­˜åœ¨ï¼Œæ— éœ€åˆ›å»º"
 fi
 
 sleep 5
 
-#¹Ø±Õselinux¼°Ïà¹Ø°²È«²ßÂÔ
+#å…³é—­selinuxåŠç›¸å…³å®‰å…¨ç­–ç•¥
 iptables -F
 iptables -X
 iptables -Z
@@ -39,23 +39,23 @@ service NetworkManager stop
 setenforce 0
 
 sleep 5
-#´´½¨°²×°Â·¾¶
+#åˆ›å»ºå®‰è£…è·¯å¾„
 if [ ! -d /opt/ ]; then
   mkdir -p /opt/
   else
-  echo "ÎÄ¼þ¼ÐÒÑ¾­´æÔÚ"
+  echo "æ–‡ä»¶å¤¹å·²ç»å­˜åœ¨"
 fi
 
 sleep 2
-#´´½¨mysqlÊý¾ÝÎÄ¼þ´æ·ÅÄ¿Â¼²¢¸Ä±äËùÓÐÕß
+#åˆ›å»ºmysqlæ•°æ®æ–‡ä»¶å­˜æ”¾ç›®å½•å¹¶æ”¹å˜æ‰€æœ‰è€…
 if [ ! -d /opt/mysqldata ]; then
     mkdir -p /opt/mysqldata
         else
-                echo "¸ÃÄ¿Â¼ÒÑ´æÔÚ£¬¸Ä±äÊô×é"
+                echo "è¯¥ç›®å½•å·²å­˜åœ¨ï¼Œæ”¹å˜å±žç»„"
                         chown -R mysql:mysql /opt/mysqldata
                         fi
 sleep 2
-#¼ì²éÏµÍ³ÊÇ·ñÒÑ¾­°²×°mysql
+#æ£€æŸ¥ç³»ç»Ÿæ˜¯å¦å·²ç»å®‰è£…mysql
 service mysql stop
 service mysqld stop
 echo ${mysql1}
@@ -64,17 +64,17 @@ do
         rpm -e --nodeps ${RPM}
 done
 sleep 30
-#¿ªÊ¼²¿Êðmysql
+#å¼€å§‹éƒ¨ç½²mysql
 cd /opt/ && tar -zxvf mysql-5.6.44-linux-glibc2.12-x86_64.tar.gz 
 sleep 30
                mv -n mysql-5.6.44-linux-glibc2.12-x86_64 mysql-5.6
 chown -R mysql:mysql /opt/mysql-5.6
 
 sleep 30
-#---------------ÐÞ¸Ä»·¾³±äÁ¿
+#---------------ä¿®æ”¹çŽ¯å¢ƒå˜é‡
 grep -w "MYSQL_HOME=/opt/mysql-5.6" /etc/profile
 if [ $? -eq 0 ]; then
-                echo "±äÁ¿ÒÑ´æÔÚ,Ìø¹ý"
+                echo "å˜é‡å·²å­˜åœ¨,è·³è¿‡"
                  else
                         cat >> /etc/profile <<EOF
                         MYSQL_HOME=/opt/mysql-5.6
@@ -82,12 +82,12 @@ if [ $? -eq 0 ]; then
                         export PATH MYSQL_HOME
 EOF
 fi
-
+source /etc/profile
 sleep 5
-#----------------±à¼­my.cnfÎÄ¼þ
+#----------------ç¼–è¾‘my.cnfæ–‡ä»¶
 
 if [ -f /etc/my.cnf ]; then
-           echo "ÅäÖÃÎÄ¼þÒÑ´æÔÚ"
+           echo "é…ç½®æ–‡ä»¶å·²å­˜åœ¨"
             else
 cat > /etc/my.cnf <<EOF
 [client]
@@ -101,7 +101,7 @@ datadir =  /opt/mysqldata/
 tmpdir =  /opt/mysqldata/tmp
 EOF
 fi
-#--------½«mysql.server¼ÓÈëÏµÍ³service¹ÜÀí
+#--------å°†mysql.serveråŠ å…¥ç³»ç»Ÿserviceç®¡ç†
 cp /opt/mysql-5.6/support-files/mysql.server /etc/init.d/mysql
 service mysql start
 service mysql status
